@@ -1,63 +1,57 @@
+import org.apache.commons.codec.digest.HmacUtils;
+
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+
+import static org.apache.commons.codec.digest.HmacAlgorithms.HMAC_SHA_256;
 
 public class Verification {
 
     private final SecureRandom key = new SecureRandom();
+    private final String keyHmac = generateKey();
 
-    public  int getKey(int number) {
-        return key.nextInt(number)+1;
+    public  SecureRandom getKey() {
+        return key;
+    }
+
+    public String getHmac() {
+        return keyHmac;
     }
 
     public boolean inputData(String[] args){
+        boolean check = false;  // replace if with a new switch
         if(args.length%2!=0){
             if(args.length > 2){
-                var argsList = new ArrayList<String>();
+                var argsList = Arrays.asList(args);
                 for (String s : args){
-                    argsList.add(s.trim());
-                    if (Collections.frequency(argsList,s) < 2){
-                        return true;
-                    }else System.out.println("Аргументы не должны повторятся");
+                    if (!(Collections.frequency(argsList,s) < 2)){
+                        System.out.println("Arguments must be non-repetitive");
+                        check = false;
+                        break;
+                    } else check =true;
                 }
-            }else System.out.println("Аргументов не может быть меньше чем 3");
-        }else System.out.println("Количество аргументов должно быть нечётным");
-        return false;
+            }else System.out.println("There must be more than two arguments");
+        }else System.out.println("The number of arguments must be odd");
+        return check;
     }
 
-    public boolean check(String str){
-        return false;
-    }
-
-    /*public static String keyHMAC(){
-        return Arrays.toString(new HmacUtils().hmac(String.valueOf(key)));
-    }*/
-
-    /*public static String computeHMAC(String secret, String... parts) {
-        var text = Arrays.stream(parts).map(StringUtils::trimToEmpty).collect(Collectors.joining(""));
-        return new HmacUtils(HmacAlgorithms.HMAC_SHA_256, secret).hmacHex(text);
-    }*/
-
-}
-
-
-    /*public static  String generateHashString(String str){
-        MessageDigest md = null;
+    public String generateKey() {
+        byte[] values = new byte[32];
         try {
-            md = MessageDigest.getInstance("SHA-256");
+            SecureRandom.getInstanceStrong().nextBytes(values);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        md.update(str.getBytes());
-        byte[] mdbytes = md.digest();
-        StringBuilder hexString = new StringBuilder();
-        for (byte mdbyte : mdbytes) {
-            hexString.append(String.format("%02x", 0xFF & mdbyte));
+        StringBuilder sb = new StringBuilder();
+        for (byte b : values) {
+            sb.append(String.format("%02x", b));
         }
-        return hexString.toString();
-    }*/
+        return String.valueOf(sb);
+    }
 
-    /*public static String computeHMAC(String secret, String... parts) {
-        var text = Arrays.stream(parts).map(StringUtils::trimToEmpty).collect(Collectors.joining(""));
-        return new HmacUtils(HmacAlgorithms.HMAC_SHA_256, secret).hmacHex(text);
-    }*/
+    public String HMAC(String keyHmac, String compMove){
+        return new HmacUtils(HMAC_SHA_256, keyHmac).hmacHex(compMove);
+    }
+}

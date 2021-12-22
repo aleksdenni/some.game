@@ -15,12 +15,17 @@ public class Game {
         var rule = new Rules();
         if (verification.inputData(args)) {
             int compMove = compMove(args);
+            var compStrMove = "Computer move: " + args[compMove - 1];
+            System.out.println("HMAC:\n"+verification.HMAC(verification.getHmac(), compStrMove));
+            menu(args);
             int userMove = userMove(args);
             if ( userMove == 0) return;
-            System.out.println("Your move: " + args[userMove - 1]);
-            System.out.println("Computer move: " + args[compMove - 1]);
+            var userStrMove = "Your move: " + args[userMove - 1];
+            System.out.println(userStrMove);
+            System.out.println(compStrMove);
             String result = rule.victoryConditions(args.length, compMove, userMove);
             System.out.println(result.equals("draw") ? "Draw!" : "You " + result + "!");
+            System.out.println("HMAC key:\n"+verification.getHmac());
         }
     }
 
@@ -39,7 +44,6 @@ public class Game {
         int userMove = 0;
         try (
                 var br = new BufferedReader(new InputStreamReader(System.in))) {
-            menu(args);
             do {
                 userStrMove = br.readLine();
                 if (userStrMove.equals("?")) {
@@ -57,7 +61,7 @@ public class Game {
                     }
                 } catch (NumberFormatException ignored) {
                     System.out.println("You need to select from the menu\n");
-                    start(args);
+                    menu(args);
                 }
             } while (!userStrMove.isEmpty());
         } catch (IOException e) {
@@ -67,6 +71,6 @@ public class Game {
     }
 
     public int compMove(String[] args){
-        return verification.getKey(args.length);
+        return verification.getKey().nextInt(args.length)+1;
     }
 }
