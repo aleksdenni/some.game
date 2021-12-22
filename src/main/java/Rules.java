@@ -1,4 +1,5 @@
 public class Rules {
+
     public String victoryConditions(int argsLength, int compMove, int userMove){
         int a = argsLength/2;
         if (userMove<=a){
@@ -12,9 +13,3 @@ public class Rules {
         }
     }
 }
-
-/*
-Win
-Lose
-Draw
-*/

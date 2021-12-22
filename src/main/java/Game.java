@@ -3,16 +3,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Game {
+
+    private final Verification verification = new Verification();
+
     public static void main(String[] args) {
         Game game = new Game();
         game.start(args);
     }
 
     public void start(String [] args ){
-        var check = new Verification();
         var rule = new Rules();
-        if (check.inputData(args)) {
-            int compMove = check.getKey(args.length);
+        if (verification.inputData(args)) {
+            int compMove = compMove(args);
             int userMove = userMove(args);
             if ( userMove == 0) return;
             System.out.println("Your move: " + args[userMove - 1]);
@@ -54,7 +56,7 @@ public class Game {
                         break;
                     }
                 } catch (NumberFormatException ignored) {
-                    System.out.println("You need to select from the menu");
+                    System.out.println("You need to select from the menu\n");
                     start(args);
                 }
             } while (!userStrMove.isEmpty());
@@ -64,7 +66,7 @@ public class Game {
         return userMove;
     }
 
-    public int compMove(){
-        return 0;
+    public int compMove(String[] args){
+        return verification.getKey(args.length);
     }
 }

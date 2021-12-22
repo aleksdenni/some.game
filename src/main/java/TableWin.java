@@ -3,7 +3,6 @@ import com.github.freva.asciitable.AsciiTable;
 public class TableWin {
 
     void getTable(String [] args){
-        String result="-";
         var headers = new String[args.length+1];
         var data = new String[args.length][args.length+1];
         var rule = new Rules();
