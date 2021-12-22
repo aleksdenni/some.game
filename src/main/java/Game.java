@@ -41,7 +41,7 @@ public class Game {
 
     public int userMove(String[] args){
         String userStrMove;
-        int userMove = 0;
+        int userMove = -1;
         try (
                 var br = new BufferedReader(new InputStreamReader(System.in))) {
             do {
@@ -52,6 +52,7 @@ public class Game {
                     continue;
                 }
                 try {
+
                     userMove = Integer.parseInt(userStrMove);
                     if (userMove > args.length || userMove < 0) {
                         throw new NumberFormatException();
@@ -63,7 +64,7 @@ public class Game {
                     System.out.println("You need to select from the menu\n");
                     menu(args);
                 }
-            } while (!userStrMove.isEmpty());
+            } while (true);
         } catch (IOException e) {
             e.printStackTrace();
         }
