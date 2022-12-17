@@ -1,4 +1,4 @@
 # some.game
-Rock paper scissors etc. game with many different moves.
+Rock, paper, scissors and etc. game with many different moves.
 
 Different moves are added using arguments
